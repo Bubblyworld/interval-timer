@@ -86,7 +86,7 @@ function Set({ pairs }) {
 
 function Repeat({ height, repeats }) {
   return (
-    <TouchableOpacity onPress={() => {}}>
+    <TouchableOpacity onLongPress={() => {}}>
       <View style={[styles.repeat, { height: rowHeight * height }]}>
         <View style={styles.repeatMarker} />
         <Text style={styles.repeatText}>{"x" + repeats}</Text>
