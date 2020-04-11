@@ -18,11 +18,18 @@ const fakeData = [
 export default function CreateScreen({ navigation }) {
   const [data, setData] = useState(fakeData); // TODO(guy): put in store
   const [editRowIndex, setEditRowIndex] = useState(0);
-  const [editRowVisible, setEditRowVisible] = useState(true);
+  const [editRowVisible, setEditRowVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Table data={data} onRowPress={i => {}} onSetPress={() => {}} />
+      <Table
+        data={data}
+        onRowPress={i => {
+          setEditRowIndex(i);
+          setEditRowVisible(true);
+        }}
+        onSetPress={() => {}}
+      />
 
       <IntervalModal
         visible={editRowVisible}

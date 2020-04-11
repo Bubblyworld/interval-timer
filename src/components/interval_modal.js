@@ -17,33 +17,21 @@ export default function IntervalModal({ visible, data, onData, onClose }) {
     containerStyles.push(styles.hidden);
   }
 
-  const [duration, setDuration] = useState(data[0]);
-  const [description, setDescription] = useState(data[1]);
-  var durationCallback = dur => {
-    setDuration(dur);
-    onData([dur, description]);
-  };
-  var descriptionCallback = desc => {
-    setDescription(desc);
-    onData([duration, desc]);
-  };
-
   return (
     <View style={containerStyles}>
       <View style={styles.modal}>
-        <Input title="Duration" value={duration} callback={durationCallback} />
+        <Input
+          title="Duration"
+          value={data[0]}
+          callback={dur => onData([dur, data[1]])}
+        />
         <Input
           title="Description"
-          value={description}
-          callback={descriptionCallback}
+          value={data[1]}
+          callback={desc => onData([data[0], desc])}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            onClose();
-          }}
-        >
+        <TouchableOpacity style={styles.button} onPress={onClose}>
           <Text style={styles.buttonText}>Done</Text>
         </TouchableOpacity>
       </View>
@@ -52,8 +40,6 @@ export default function IntervalModal({ visible, data, onData, onClose }) {
 }
 
 function Input({ title, value, callback }) {
-  const [inputValue, setInputValue] = useState(value);
-
   return (
     <View style={styles.inputContainer}>
       <View style={styles.title}>
@@ -63,9 +49,8 @@ function Input({ title, value, callback }) {
       <View style={styles.input}>
         <TextInput
           style={styles.inputText}
-          value={inputValue}
+          value={value}
           onChangeText={txt => {
-            setInputValue(txt);
             callback(txt);
           }}
           editable={true}

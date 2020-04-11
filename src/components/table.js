@@ -17,7 +17,7 @@ export default function Table({ data, onRowPress, onSetPress }) {
         index={index}
         dur={data[i][0]}
         desc={data[i][1]}
-        handler={() => onRowPress(i)}
+        handler={() => onRowPress(index)}
       />
     );
   }
