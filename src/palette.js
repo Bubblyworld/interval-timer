@@ -8,7 +8,7 @@ const seaweed = {
   dull: "#86a873",
   bright: "#bb9f06",
 
-  text: "#111",
+  text: "#092e31",
   smallFont: 12,
   medFont: 14,
   bigFont: 16

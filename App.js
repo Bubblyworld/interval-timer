@@ -27,7 +27,7 @@ const navigatorTheme = {
     primary: Palette.med,
     background: Palette.light,
     card: Palette.med,
-    text: Palette.dark,
+    text: Palette.text,
     border: Palette.modify(Palette.dark, 30)
   }
 };

@@ -2,6 +2,8 @@ import React from "react";
 import * as Palette from "../palette.js";
 import { StyleSheet, Text, View } from "react-native";
 
+const rowHeight = 40;
+
 // TODO(guy): Replace with real data.
 const fakeData = [
   ["12s", "1kg small edge hang"],
@@ -54,13 +56,51 @@ function Row({ index, dur, desc }) {
 }
 
 function Sets({ rows }) {
-  return <View style={styles.set} />;
+  return (
+    <View style={styles.sets}>
+      <Set
+        pairs={[
+          [0, 1],
+          [4, 5]
+        ]}
+      />
+
+      <Set pairs={[[0, 2]]} />
+    </View>
+  );
+}
+
+function Set({ pairs }) {
+  var children = [];
+  var lastIndex = 0;
+  for (var i = 0; i < pairs.length; i++) {
+    if (pairs[i][0] > lastIndex) {
+      const diff = pairs[i][0] - lastIndex - 1;
+      children.push(<View style={{ height: rowHeight * diff }} />);
+    }
+
+    const diff = pairs[i][1] - pairs[i][0] + 1;
+    children.push(<Repeat height={diff} repeats={2} />);
+    lastIndex = pairs[i][1];
+  }
+
+  return <View style={styles.set}>{children}</View>;
+}
+
+function Repeat({ height, repeats }) {
+  return (
+    <View style={[styles.repeat, { height: rowHeight * height }]}>
+      <View style={styles.repeatMarker} />
+      <Text style={styles.repeatText}>{"x" + repeats}</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
+    padding: 20,
     alignItems: "center",
     justifyContent: "center"
   },
@@ -86,7 +126,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    height: 40
+    height: rowHeight
   },
 
   durText: {
@@ -110,10 +150,38 @@ const styles = StyleSheet.create({
     color: Palette.text
   },
 
-  set: {
+  sets: {
     flex: 1,
+    flexDirection: "row",
     backgroundColor: Palette.med,
     borderLeftWidth: 2,
     borderColor: Palette.modify(Palette.med, 10)
+  },
+
+  set: {
+    flexDirection: "column"
+  },
+
+  repeat: {
+    flexDirection: "row"
+  },
+
+  repeatMarker: {
+    width: 10,
+    marginLeft: 8,
+    marginTop: rowHeight / 3,
+    marginBottom: rowHeight / 3,
+    borderColor: Palette.light,
+    borderRightWidth: 2,
+    borderTopWidth: 2,
+    borderBottomWidth: 2
+  },
+
+  repeatText: {
+    marginLeft: 3,
+    marginTop: rowHeight / 3,
+    fontSize: Palette.smallFont,
+    fontWeight: "bold",
+    color: Palette.light
   }
 });
