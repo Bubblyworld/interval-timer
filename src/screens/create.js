@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Palette from "../palette.js";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const rowHeight = 40;
 
@@ -24,9 +24,21 @@ export default function CreateScreen({ navigator }) {
 }
 
 function Table() {
+  const [selectedRow, setSelectedRow] = useState(-1);
+  console.log(selectedRow);
+
   var rows = [];
   for (var i = 0; i < fakeData.length; i++) {
-    rows.push(<Row index={i} dur={fakeData[i][0]} desc={fakeData[i][1]} />);
+    const index = i;
+
+    rows.push(
+      <Row
+        index={index}
+        dur={fakeData[i][0]}
+        desc={fakeData[i][1]}
+        handler={() => setSelectedRow(index)}
+      />
+    );
   }
 
   return (
@@ -37,21 +49,23 @@ function Table() {
   );
 }
 
-function Row({ index, dur, desc }) {
+function Row({ index, dur, desc, handler }) {
   var bg = Palette.med;
   if (index % 2 == 0) {
     bg = Palette.modify(Palette.med, 10);
   }
 
   return (
-    <View style={[styles.row, { backgroundColor: bg }]}>
-      <View style={styles.durTextWrap}>
-        <Text style={styles.durText}>{dur}</Text>
+    <TouchableOpacity onPress={handler}>
+      <View style={[styles.row, { backgroundColor: bg }]}>
+        <View style={styles.durTextWrap}>
+          <Text style={styles.durText}>{dur}</Text>
+        </View>
+        <Text style={styles.descText} numberOfLines={1}>
+          {desc}
+        </Text>
       </View>
-      <Text style={styles.descText} numberOfLines={1}>
-        {desc}
-      </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -89,10 +103,12 @@ function Set({ pairs }) {
 
 function Repeat({ height, repeats }) {
   return (
-    <View style={[styles.repeat, { height: rowHeight * height }]}>
-      <View style={styles.repeatMarker} />
-      <Text style={styles.repeatText}>{"x" + repeats}</Text>
-    </View>
+    <TouchableOpacity onPress={() => {}}>
+      <View style={[styles.repeat, { height: rowHeight * height }]}>
+        <View style={styles.repeatMarker} />
+        <Text style={styles.repeatText}>{"x" + repeats}</Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 
