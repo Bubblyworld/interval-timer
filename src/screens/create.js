@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Table from "../components/table.js";
-import IntervalModal from "../components/interval_modal.js";
+import Table from "../tables/table.js";
+import IntervalModal from "../modals/interval_modal.js";
 import * as Palette from "../palette.js";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
