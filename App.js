@@ -3,7 +3,7 @@ import HomeScreen from "./src/screens/home.js";
 import TrainScreen from "./src/screens/train.js";
 import CreateScreen from "./src/screens/create.js";
 import * as Palette from "./src/palette.js";
-import { StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
