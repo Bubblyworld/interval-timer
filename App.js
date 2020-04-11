@@ -11,10 +11,10 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName='Create a Workout'>
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='Train' component={TrainScreen} />
-        <Stack.Screen name='Create' component={CreateScreen} />
+        <Stack.Screen name='Create a Workout' component={CreateScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

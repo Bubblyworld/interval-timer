@@ -12,7 +12,7 @@ export default function HomeScreen({ navigation }) {
       <Button 
         msg='Create a Workout'
         color='#4F8'
-        onPress={() => navigation.navigate('Create')} />
+        onPress={() => navigation.navigate('Create a Workout')} />
     </View>
   );
 }
@@ -31,7 +31,7 @@ function Button({ msg, color, onPress }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#effcef',
     alignItems: 'center',
     justifyContent: 'center',
   },
