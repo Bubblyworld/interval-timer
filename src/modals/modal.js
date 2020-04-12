@@ -68,6 +68,6 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: Palette.text,
-    fontSize: Palette.largeFont
+    fontSize: Palette.bigFont
   }
 });
