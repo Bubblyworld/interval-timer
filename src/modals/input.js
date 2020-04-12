@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
   input: {
     padding: 10,
     borderRadius: 4,
-    backgroundColor: Palette.modify(Palette.med, 10),
-    color: Palette.text
+    backgroundColor: Palette.modify(Palette.med, 10)
   },
 
   inputText: {

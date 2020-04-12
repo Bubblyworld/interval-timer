@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Table from "../tables/table.js";
 import IntervalModal from "../modals/interval_modal.js";
 import * as Palette from "../palette.js";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import actions from "../redux/actions";
 
 // TODO(guy): Replace with real data.
 const fakeData = [
@@ -19,6 +21,10 @@ export default function CreateScreen({ navigation }) {
   const [data, setData] = useState(fakeData); // TODO(guy): put in store
   const [editRowIndex, setEditRowIndex] = useState(0);
   const [editRowVisible, setEditRowVisible] = useState(false);
+
+  // TODO(guy): This should be a presentation component. Need a list wrapper.
+  const workouts = useSelector(state => state.workouts, shallowEqual);
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>

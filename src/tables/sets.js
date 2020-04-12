@@ -30,11 +30,13 @@ export function Set({ pairs }) {
   for (var i = 0; i < pairs.length; i++) {
     if (pairs[i][0] > lastIndex) {
       const diff = pairs[i][0] - lastIndex - 1;
-      children.push(<View style={{ height: rowHeight * diff }} />);
+      children.push(
+        <View key={"space" + i} style={{ height: rowHeight * diff }} />
+      );
     }
 
     const diff = pairs[i][1] - pairs[i][0] + 1;
-    children.push(<Repeat height={diff} repeats={2} />);
+    children.push(<Repeat key={"repeat" + i} height={diff} repeats={2} />);
     lastIndex = pairs[i][1];
   }
 

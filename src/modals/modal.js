@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 5,
     backgroundColor: Palette.med,
-    flexDirection: "col",
+    flexDirection: "column",
     alignItems: "center",
     padding: 20,
     width: "80%",

@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.bright,
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    shadowColor: Palette.modify(Palette.bright, -20),
+    shadowColor: Palette.med,
     shadowOffset: { height: 5, width: 5 }
   },
 

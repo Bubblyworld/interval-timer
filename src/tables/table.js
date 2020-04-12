@@ -15,6 +15,7 @@ export default function Table({ data, onRowPress, onSetPress }) {
 
     rows.push(
       <Row
+        key={index}
         index={index}
         dur={data[i][0]}
         desc={data[i][1]}
