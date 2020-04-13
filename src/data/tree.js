@@ -104,6 +104,7 @@ export class RootNode extends Tree {
   }
 }
 
+// NOTE: We assume that RepeatNodes always have at least one child.
 export class RepeatNode extends Tree {
   constructor(repeats, children) {
     super("", children);
