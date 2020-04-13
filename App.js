@@ -7,6 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./src/screens/home.js";
 import TrainScreen from "./src/screens/train.js";
 import CreateScreen from "./src/screens/create.js";
+import ListScreen from "./src/screens/list.js";
 import * as Palette from "./src/palette.js";
 import { Tree, RepeatNode, LeafNode } from "./src/data/tree.js";
 import { Workout, Interval, RepeatCol, Repeat } from "./src/data/workout.js";
@@ -35,18 +36,19 @@ const store = createStore(reducer, { workouts: [new Workout(il, rcl)] });
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer theme={navigatorTheme}>
+      <NavigationContainer theme={navigationTheme}>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Train" component={TrainScreen} />
           <Stack.Screen name="Create a Workout" component={CreateScreen} />
+          <Stack.Screen name="Select a Workout" component={ListScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
 
-const navigatorTheme = {
+const navigationTheme = {
   dark: false,
   colors: {
     primary: Palette.med,

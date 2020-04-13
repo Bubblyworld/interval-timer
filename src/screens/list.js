@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function TrainScreen({ navigation }) {
+// ListScreen shows all the user's defined workouts, and when one is selected
+// navigates to 'dest' with the 'selectedIndex' prop set.
+export default function ListScreen({ navigation, dest }) {
   return (
     <View style={styles.container}>
-      <Text>Training Screen</Text>
+      <Text>List of Things</Text>
     </View>
   );
 }

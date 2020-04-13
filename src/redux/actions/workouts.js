@@ -1,3 +1,4 @@
+// Each user has a list of their defined workouts that they can modify/create.
 export const ADD_WORKOUT = "ADD_WORKOUT";
 export const MODIFY_WORKOUT = "MODIFY_WORKOUT";
 export const DELETE_WORKOUT = "DELETE_WORKOUT";
