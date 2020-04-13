@@ -2,6 +2,8 @@
 export const ADD_WORKOUT = "ADD_WORKOUT";
 export const MODIFY_WORKOUT = "MODIFY_WORKOUT";
 export const DELETE_WORKOUT = "DELETE_WORKOUT";
+export const MODIFY_INTERVAL = "MODIFY_INTERVAL";
+export const MODIFY_NAME = "MODIFY_NAME";
 
 export function addWorkout(workout) {
   return {
@@ -22,5 +24,22 @@ export function deleteWorkout(index) {
   return {
     type: DELETE_WORKOUT,
     index: index
+  };
+}
+
+export function modifyInterval(workoutIndex, intervalIndex, interval) {
+  return {
+    type: MODIFY_INTERVAL,
+    workoutIndex: workoutIndex,
+    intervalIndex: intervalIndex,
+    interval: interval
+  };
+}
+
+export function modifyName(index, name) {
+  return {
+    type: MODIFY_NAME,
+    index: index,
+    name: name
   };
 }

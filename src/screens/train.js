@@ -9,8 +9,11 @@ import format from "format-duration";
 
 export default function TrainScreen({ navigation, route }) {
   const workoutIndex = getWorkoutIndex(route);
-  const workouts = useSelector(state => state.workouts, shallowEqual);
-  const [state, setState] = useState(defaultUIState(workouts[workoutIndex]));
+  const workout = useSelector(
+    state => state.workouts[workoutIndex],
+    shallowEqual
+  );
+  const [state, setState] = useState(defaultUIState(workout));
   useEffect(timerEffect(state, setState));
 
   const text = state.traverse.isDone()

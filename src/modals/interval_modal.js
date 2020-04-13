@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "./modal.js";
-import Input from "./input.js";
+import Input from "../components/input.js";
 
 // IntervalModal controls editing of a particular interval's time and
 // description. Later on we'll implement metrics and allow them to be
