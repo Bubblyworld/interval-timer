@@ -18,8 +18,8 @@ export default class Traverse {
     return this.iteration[this.iteration.length - 1].node;
   }
 
-  step() {
-    this.iteration = iterate(this.iteration);
+  next() {
+    return Object.assign(this, { iteration: iterate(this.iteration) });
   }
 }
 
