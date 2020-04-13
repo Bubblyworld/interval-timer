@@ -32,6 +32,10 @@ class Iterator {
 }
 
 function iterationFor(node) {
+  if (!node) {
+    return []; // default to empty iteration for undefined input edge case
+  }
+
   if (node instanceof RootNode && node.children.length == 0) {
     return []; // edge-case where we have an empty tree
   }
