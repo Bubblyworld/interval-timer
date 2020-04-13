@@ -6,6 +6,7 @@ import * as Palette from "../palette.js";
 import { FaPause, FaPlay, FaRedo, FaAngleRight } from "react-icons/fa";
 import parse from "parse-duration";
 import format from "format-duration";
+import Icon from "../components/icon.js";
 
 export default function TrainScreen({ navigation, route }) {
   const workoutIndex = getWorkoutIndex(route);
@@ -41,18 +42,6 @@ function Timer({ timeRemainingMs }) {
       <Text style={styles.timerText}>{format(timeRemainingMs)}</Text>
       <Text style={styles.msText}>{ms.toFixed(0)}</Text>
     </View>
-  );
-}
-
-function Icon({ icon, size, onPress }) {
-  const ChildIcon = icon; // jsx requires capitalised names
-
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.iconWrap}>
-        <ChildIcon size={size} color={Palette.text} />
-      </View>
-    </TouchableOpacity>
   );
 }
 
@@ -260,10 +249,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     marginTop: 40
-  },
-
-  iconWrap: {
-    marginLeft: 20,
-    marginRight: 20
   }
 });
