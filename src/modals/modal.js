@@ -1,6 +1,7 @@
 import React from "react";
 import * as Palette from "../palette.js";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Button from "../components/button.js";
 
 // Modal is a wrapper component that is absolutely positioned in the center
 // and can be enabled/disabled by a flag. It contains a button that closes
@@ -16,9 +17,7 @@ export default function Modal({ children, visible, onClose }) {
       <View style={styles.modal}>
         {children}
 
-        <TouchableOpacity style={styles.button} onPress={onClose}>
-          <Text style={styles.buttonText}>Done</Text>
-        </TouchableOpacity>
+        <Button msg="Close" onPress={onClose} />
       </View>
     </View>
   );
@@ -52,22 +51,5 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowColor: Palette.dark,
     shadowOffset: { height: 5, width: 5 }
-  },
-
-  button: {
-    width: 120,
-    height: 40,
-    borderRadius: 5,
-    borderColor: Palette.modify(Palette.bright, -10),
-    backgroundColor: Palette.bright,
-    borderWidth: 1,
-    marginTop: 10,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-
-  buttonText: {
-    color: Palette.text,
-    fontSize: Palette.bigFont
   }
 });

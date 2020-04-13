@@ -6,6 +6,7 @@ import * as Palette from "../palette.js";
 import Icon from "../components/icon.js";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import actions from "../redux/actions";
+import DeleteModal from "../modals/delete_modal.js";
 
 // ListScreen shows all the user's defined workouts, and when one is selected
 // navigates to 'dest' with the 'selectedIndex' prop set.
@@ -13,6 +14,10 @@ export default function ListScreen({ navigation, route }) {
   const workouts = useSelector(state => state.workouts, shallowEqual);
   const dest = route.params && route.params.dest ? route.params.dest : "Home";
   const dispatch = useDispatch();
+
+  // TODO: Clean up.
+  const [showDelete, setShowDelete] = useState(false);
+  const [workoutIndex, setWorkoutIndex] = useState(0);
 
   var rows = [];
   for (var i = 0; i < workouts.length; i++) {
@@ -40,7 +45,10 @@ export default function ListScreen({ navigation, route }) {
           <Icon
             icon={FaTrash}
             size={12}
-            onPress={() => dispatch(actions.deleteWorkout(ic))}
+            onPress={() => {
+              setShowDelete(true);
+              setWorkoutIndex(ic);
+            }}
           />
         </Cell>
       </Row>
@@ -57,7 +65,26 @@ export default function ListScreen({ navigation, route }) {
           {rows}
         </Table>
       </View>
+
+      <DeleteModal
+        visible={showDelete}
+        msg={getModalText(workouts, workoutIndex)}
+        onAccept={() => {
+          dispatch(actions.deleteWorkout(workoutIndex));
+          setShowDelete(false);
+        }}
+      />
     </View>
+  );
+}
+
+function getModalText(workouts, workoutIndex) {
+  if (workoutIndex < 0 || workoutIndex >= workouts.length) {
+    return "";
+  }
+
+  return (
+    'Are you sure you want to delete "' + workouts[workoutIndex].name + '"?'
   );
 }
 

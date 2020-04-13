@@ -9,8 +9,6 @@ import { Workout } from "../data/workout.js";
 import Input from "../components/input.js";
 
 export default function CreateScreen({ navigation, route }) {
-  const [editRowIndex, setEditRowIndex] = useState(0);
-  const [editRowVisible, setEditRowVisible] = useState(false);
   const workoutIndex = route.params.selectedIndex;
   const workoutTree = useSelector(
     state => state.workouts[workoutIndex],
@@ -18,6 +16,10 @@ export default function CreateScreen({ navigation, route }) {
   );
   const workout = workoutTree.toWorkout();
   const dispatch = useDispatch();
+
+  // TODO: Clean up.
+  const [editRowIndex, setEditRowIndex] = useState(0);
+  const [editRowVisible, setEditRowVisible] = useState(false);
 
   return (
     <View style={styles.container}>
