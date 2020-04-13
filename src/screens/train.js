@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Traverse from "../data/traverse.js";
@@ -8,62 +8,21 @@ import parse from "parse-duration";
 import format from "format-duration";
 
 export default function TrainScreen({ navigation, route }) {
-  const workoutIndex =
-    route.params && route.params.selectedIndex ? route.params.selectedIndex : 0;
+  const workoutIndex = getWorkoutIndex(route);
   const workouts = useSelector(state => state.workouts, shallowEqual);
-  const [traverse, setTraverse] = useState(
-    new Traverse(workouts[workoutIndex])
-  );
-  const [paused, setPaused] = useState(true);
-  const [durationMs, setDurationMs] = useState(parse(traverse.node().duration));
+  const [state, setState] = useState(defaultUIState(workouts[workoutIndex]));
+  useEffect(timerEffect(state, setState));
 
-  const nextRep = () => {
-    var next = traverse.next();
-    setDurationMs(parse(traverse.node().duration));
-    setTraverse(next);
-  };
-
-  // Advance the clock if we're not paused!
-  if (!paused) {
-    setTimeout(() => {
-      if (durationMs <= 100) {
-        nextRep();
-      } else {
-        setDurationMs(durationMs - 100);
-      }
-    }, 100);
-  }
-
-  const icons = [];
-  if (paused) {
-    icons.push(
-      <Icon
-        key="play"
-        icon={FaPlay}
-        size={30}
-        onPress={() => setPaused(false)}
-      />
-    );
-  } else {
-    icons.push(
-      <Icon
-        key="pause"
-        icon={FaPause}
-        size={30}
-        onPress={() => setPaused(true)}
-      />
-    );
-  }
-  icons.push(
-    <Icon key="next" icon={FaAngleRight} size={50} onPress={nextRep} />
-  );
+  const icons = state.isPaused
+    ? [playIcon(state, setState), nextIcon(state, setState)]
+    : [pauseIcon(state, setState), nextIcon(state, setState)];
 
   return (
     <View style={styles.container}>
-      <Timer durationMs={durationMs} />
+      <Timer timeRemainingMs={state.timeRemainingMs} />
 
       <View style={styles.descWrap}>
-        <Text style={styles.descText}>{traverse.node().description}</Text>
+        <Text style={styles.descText}>{state.traverse.node().description}</Text>
       </View>
 
       <View style={styles.iconContainer}>{icons}</View>
@@ -71,12 +30,12 @@ export default function TrainScreen({ navigation, route }) {
   );
 }
 
-function Timer({ durationMs }) {
-  const ms = (durationMs % 1000) / 100.0;
+function Timer({ timeRemainingMs }) {
+  const ms = (timeRemainingMs % 1000) / 100.0;
 
   return (
     <View style={styles.timer}>
-      <Text style={styles.timerText}>{format(durationMs)}</Text>
+      <Text style={styles.timerText}>{format(timeRemainingMs)}</Text>
       <Text style={styles.msText}>{ms.toFixed(0)}</Text>
     </View>
   );
@@ -92,6 +51,126 @@ function Icon({ icon, size, onPress }) {
       </View>
     </TouchableOpacity>
   );
+}
+
+function pauseIcon(state, setState) {
+  return (
+    <Icon
+      key="pause"
+      icon={FaPause}
+      size={30}
+      onPress={() => setState(uiState(state, setIsPaused(true)))}
+    />
+  );
+}
+
+function playIcon(state, setState) {
+  return (
+    <Icon
+      key="play"
+      icon={FaPlay}
+      size={30}
+      onPress={() => setState(uiState(state, setIsPaused(false)))}
+    />
+  );
+}
+
+function nextIcon(state, setState) {
+  return (
+    <Icon
+      key="next"
+      icon={FaAngleRight}
+      size={50}
+      onPress={() => setState(uiState(state, nextRep()))}
+    />
+  );
+}
+
+function timerEffect(state, setState) {
+  return () => {
+    if (!state.isPaused) {
+      var cancelled = false;
+
+      setTimeout(() => {
+        if (cancelled) {
+          return;
+        }
+
+        if (state.timeRemainingMs <= 100) {
+          setState(uiState(state, nextRep()));
+        } else {
+          setState(uiState(state, addTimeMs(-100)));
+        }
+      }, 100);
+
+      return () => {
+        cancelled = true;
+      };
+    }
+  };
+}
+
+function getWorkoutIndex(route) {
+  return route.params && route.params.selectedIndex
+    ? route.params.selectedIndex
+    : 0;
+}
+
+function defaultUIState(workout) {
+  var traverse = new Traverse(workout);
+
+  return {
+    traverse: traverse,
+    isPaused: true,
+    timeRemainingMs: parse(traverse.node().duration)
+  };
+}
+
+const uiActions = {
+  NEXT_REP: "NEXT_REP",
+  ADD_TIME_MS: "DEC_TIME",
+  SET_IS_PAUSED: "SET_IS_PAUSED"
+};
+
+function uiState(state, action) {
+  switch (action.type) {
+    case uiActions.NEXT_REP:
+      var next = state.traverse.next();
+      return Object.assign({}, state, {
+        traverse: next,
+        timeRemainingMs: parse(next.node().duration)
+      });
+
+    case uiActions.ADD_TIME_MS:
+      return Object.assign({}, state, {
+        timeRemainingMs: state.timeRemainingMs + action.dur
+      });
+
+    case uiActions.SET_IS_PAUSED:
+      return Object.assign({}, state, {
+        isPaused: action.paused
+      });
+  }
+
+  return state;
+}
+
+function nextRep() {
+  return { type: uiActions.NEXT_REP };
+}
+
+function addTimeMs(dur) {
+  return {
+    type: uiActions.ADD_TIME_MS,
+    dur: dur
+  };
+}
+
+function setIsPaused(paused) {
+  return {
+    type: uiActions.SET_IS_PAUSED,
+    paused: paused
+  };
 }
 
 const styles = StyleSheet.create({
