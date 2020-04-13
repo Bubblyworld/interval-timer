@@ -4,21 +4,28 @@ import { Table, Row, Cell } from "../components/table.js";
 import { Sets } from "../components/sets.js";
 import * as Palette from "../palette.js";
 
+const rowHeight = 40;
+
 // WorkoutTable renders the duration/decription table and sets markers, along
 // with hooks for rendering the modals on presses.
-export default function WorkoutTable({ data, onRowPress, onSetPress }) {
+export default function WorkoutTable({
+  intervals,
+  repeatCols,
+  onRowPress,
+  onSetPress
+}) {
   var rows = [];
-  for (var i = 0; i < data.length; i++) {
+  for (var i = 0; i < intervals.length; i++) {
     rows.push(
       <Row key={"row-" + i}>
         <Cell absolute={60}>
           <View style={styles.durTextWrap}>
-            <Text style={styles.durText}>{data[i][0]}</Text>
+            <Text style={styles.durText}>{intervals[i].duration}</Text>
           </View>
         </Cell>
 
         <Cell flex={1}>
-          <Text style={styles.descText}>{data[i][1]}</Text>
+          <Text style={styles.descText}>{intervals[i].description}</Text>
         </Cell>
       </Row>
     );
@@ -27,13 +34,17 @@ export default function WorkoutTable({ data, onRowPress, onSetPress }) {
   return (
     <View style={styles.container}>
       <View style={styles.table}>
-        <Table onRowPress={onRowPress} height={40}>
+        <Table height={rowHeight} onRowPress={onRowPress}>
           {rows}
         </Table>
       </View>
 
       <View style={styles.sets}>
-        <Sets onSetPress={onSetPress} />
+        <Sets
+          repeatCols={repeatCols}
+          height={rowHeight}
+          onSetPress={onSetPress}
+        />
       </View>
     </View>
   );

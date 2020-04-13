@@ -33,9 +33,9 @@ var rcl = [
 
 const store = createStore(reducer, {
   workouts: [
-    new Workout("Guy's first workout", il, rcl),
-    new Workout("Guy's second workout", il, rcl),
-    new Workout("Guy's third workout", il, rcl)
+    new Workout("Guy's first workout", il, rcl).toTree(),
+    new Workout("Guy's second workout", il, rcl).toTree(),
+    new Workout("Guy's third workout", il, rcl).toTree()
   ]
 });
 

@@ -2,53 +2,66 @@ import React from "react";
 import * as Palette from "../palette.js";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const rowHeight = 40;
-
 // Sets is a component that renders the brackets on the right side of the
 // "create a workout" table that indicate groups of intervals that should
 // be repeated. Each "Set" is a vertical column of brackets, which are
 // nested horizontally.
-export function Sets({ onSetPress }) {
-  // TODO(guy): Need to pass data in correctly and wire up the callbacks.
-  return (
-    <View style={styles.sets}>
-      <Set
-        pairs={[
-          [0, 1],
-          [4, 5]
-        ]}
-      />
+export function Sets({ repeatCols, height, onSetPress }) {
+  var children = [];
+  for (var i = 0; i < repeatCols.length; i++) {
+    children.push(
+      <Set key={"set-" + i} height={height} repeats={repeatCols[i].repeats} />
+    );
+  }
 
-      <Set pairs={[[0, 2]]} />
-    </View>
-  );
+  return <View style={styles.sets}>{children}</View>;
 }
 
-export function Set({ pairs }) {
-  var children = [];
+function Set({ height, repeats }) {
   var lastIndex = 0;
-  for (var i = 0; i < pairs.length; i++) {
-    if (pairs[i][0] > lastIndex) {
-      const diff = pairs[i][0] - lastIndex - 1;
+  var children = [];
+  for (var i = 0; i < repeats.length; i++) {
+    const repeat = repeats[i];
+
+    if (repeat.indexA > lastIndex) {
+      const diff = repeat.indexA - lastIndex;
       children.push(
-        <View key={"space" + i} style={{ height: rowHeight * diff }} />
+        <View key={"space-" + i} style={{ height: height * diff }} />
       );
     }
 
-    const diff = pairs[i][1] - pairs[i][0] + 1;
-    children.push(<Repeat key={"repeat" + i} height={diff} repeats={2} />);
-    lastIndex = pairs[i][1];
+    const diff = repeat.indexB - repeat.indexA;
+    children.push(
+      <Repeat
+        key={"repeat-" + i}
+        markerOffset={height / 3}
+        height={diff * height}
+        repeats={2}
+      />
+    );
+
+    lastIndex = repeat.indexB;
   }
 
   return <View style={styles.set}>{children}</View>;
 }
 
-function Repeat({ height, repeats }) {
+function Repeat({ height, markerOffset, repeats }) {
   return (
     <TouchableOpacity onLongPress={() => {}}>
-      <View style={[styles.repeat, { height: rowHeight * height }]}>
-        <View style={styles.repeatMarker} />
-        <Text style={styles.repeatText}>{"x" + repeats}</Text>
+      <View style={[styles.repeat, { height: height }]}>
+        <View
+          style={[
+            styles.repeatMarker,
+            {
+              marginTop: markerOffset,
+              marginBottom: markerOffset
+            }
+          ]}
+        />
+        <Text style={(styles.repeatText, { marginTop: markerOffset })}>
+          {"x" + repeats}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -70,8 +83,6 @@ const styles = StyleSheet.create({
   repeatMarker: {
     width: 10,
     marginLeft: 8,
-    marginTop: rowHeight / 3,
-    marginBottom: rowHeight / 3,
     borderColor: Palette.light,
     borderRightWidth: 2,
     borderTopWidth: 2,
@@ -80,7 +91,6 @@ const styles = StyleSheet.create({
 
   repeatText: {
     marginLeft: 3,
-    marginTop: rowHeight / 3,
     fontSize: Palette.smallFont,
     fontWeight: "bold",
     color: Palette.light

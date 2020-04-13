@@ -5,31 +5,21 @@ import WorkoutTable from "../components/workout_table.js";
 import IntervalModal from "../modals/interval_modal.js";
 import * as Palette from "../palette.js";
 import actions from "../redux/actions";
+import { Workout } from "../data/workout.js";
 
-// TODO(guy): Replace with real data.
-const fakeData = [
-  ["12s", "1kg small edge hang"],
-  ["3m", "rest"],
-  ["2m", "end of set rest"],
-  ["5m", "end of superset rest"],
-  ["30s", "1kg pullug x 5"],
-  ["3m", "rest"],
-  ["2m", "end of set rest"]
-];
-
-export default function CreateScreen({ navigation }) {
-  const [data, setData] = useState(fakeData); // TODO(guy): put in store
+export default function CreateScreen({ navigation, route }) {
   const [editRowIndex, setEditRowIndex] = useState(0);
   const [editRowVisible, setEditRowVisible] = useState(false);
-
-  // TODO(guy): This should be a presentation component. Need a list wrapper.
+  const workoutIndex = route.params.selectedIndex;
   const workouts = useSelector(state => state.workouts, shallowEqual);
+  const workout = workouts[workoutIndex].toWorkout();
   const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
       <WorkoutTable
-        data={data}
+        intervals={workout.intervals}
+        repeatCols={workout.repeatCols}
         onRowPress={i => {
           setEditRowIndex(i);
           setEditRowVisible(true);
@@ -40,18 +30,17 @@ export default function CreateScreen({ navigation }) {
       <IntervalModal
         visible={editRowVisible}
         setVisible={setEditRowVisible}
-        data={data[editRowIndex]}
-        onData={datum => {
-          var newData = [];
-          for (var i = 0; i < data.length; i++) {
-            if (i == editRowIndex) {
-              newData.push(datum);
-            } else {
-              newData.push(data[i]);
-            }
-          }
+        interval={workout.intervals[editRowIndex]}
+        onChange={interval => {
+          var newWorkout = Object.assign(workout, {
+            intervals: [
+              ...workout.intervals.slice(0, editRowIndex),
+              interval,
+              ...workout.intervals.slice(editRowIndex + 1)
+            ]
+          });
 
-          setData(newData);
+          dispatch(actions.modifyWorkout(workoutIndex, newWorkout.toTree()));
         }}
         onClose={() => {
           setEditRowVisible(false);

@@ -54,7 +54,7 @@ export class Workout {
           }
         }
 
-        var subTree = new Workout(subIntervals, subRepeats)._toTree();
+        var subTree = new Workout("", subIntervals, subRepeats)._toTree();
         children.push(new RepeatNode(repeatCol.repeats[rci].repeats, subTree));
         i += subIntervals.length - 1;
         rci++;

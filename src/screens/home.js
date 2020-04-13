@@ -1,21 +1,37 @@
 import React from "react";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import * as Palette from "../palette.js";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import actions from "../redux/actions";
+import { LeafNode, RootNode } from "../data/tree.js";
 
 export default function HomeScreen({ navigation }) {
+  const workouts = useSelector(state => state.workouts, shallowEqual);
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.container}>
       <Button
         msg="Train"
         onPress={() =>
-          // TODO: This should navigate to the timer screen.
-          navigation.navigate("Select a Workout", { dest: "Create a Workout" })
+          navigation.navigate("Select a Workout", { dest: "Train" })
         }
       />
 
       <Button
         msg="Create a Workout"
-        onPress={() => navigation.navigate("Create a Workout")}
+        onPress={() => {
+          dispatch(
+            actions.addWorkout(
+              new RootNode("My Workout", [
+                new LeafNode("12s", "An example interval.")
+              ])
+            )
+          );
+          navigation.navigate("Create a Workout", {
+            selectedIndex: workouts.length
+          });
+        }}
       />
     </View>
   );
