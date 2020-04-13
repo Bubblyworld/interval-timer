@@ -9,7 +9,7 @@ const rowHeight = 40;
 // be repeated. Each "Set" is a vertical column of brackets, which are
 // nested horizontally.
 export function Sets({ onSetPress }) {
-  // TOODO(guy): Need to pass data in correctly and wire up the callbacks.
+  // TODO(guy): Need to pass data in correctly and wire up the callbacks.
   return (
     <View style={styles.sets}>
       <Set
@@ -56,11 +56,7 @@ function Repeat({ height, repeats }) {
 
 const styles = StyleSheet.create({
   sets: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: Palette.med,
-    borderLeftWidth: 2,
-    borderColor: Palette.modify(Palette.med, 10)
+    flexDirection: "row"
   },
 
   set: {

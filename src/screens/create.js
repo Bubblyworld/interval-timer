@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Table from "../tables/table.js";
+import WorkoutTable from "../components/workout_table.js";
 import IntervalModal from "../modals/interval_modal.js";
 import * as Palette from "../palette.js";
 import actions from "../redux/actions";
@@ -28,7 +28,7 @@ export default function CreateScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Table
+      <WorkoutTable
         data={data}
         onRowPress={i => {
           setEditRowIndex(i);
