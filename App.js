@@ -31,13 +31,19 @@ var rcl = [
   new RepeatCol([new Repeat(0, 3, 3), new Repeat(4, 7, 3)])
 ];
 
-const store = createStore(reducer, { workouts: [new Workout(il, rcl)] });
+const store = createStore(reducer, {
+  workouts: [
+    new Workout("Guy's first workout", il, rcl),
+    new Workout("Guy's second workout", il, rcl),
+    new Workout("Guy's third workout", il, rcl)
+  ]
+});
 
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer theme={navigationTheme}>
-        <Stack.Navigator initialRouteName="Create a Workout">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Train" component={TrainScreen} />
           <Stack.Screen name="Create a Workout" component={CreateScreen} />

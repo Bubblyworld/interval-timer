@@ -10,7 +10,7 @@ export default function WorkoutTable({ data, onRowPress, onSetPress }) {
   var rows = [];
   for (var i = 0; i < data.length; i++) {
     rows.push(
-      <Row>
+      <Row key={"row-" + i}>
         <Cell absolute={60}>
           <View style={styles.durTextWrap}>
             <Text style={styles.durText}>{data[i][0]}</Text>

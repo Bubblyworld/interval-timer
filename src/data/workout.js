@@ -4,14 +4,15 @@ import { RootNode, RepeatNode, LeafNode } from "./tree.js";
 // defined in "./tree.js". This form of the data structure is more useful for
 // rendering UI components, while the tree is easier to write code against.
 export class Workout {
-  constructor(intervals, repeatCols) {
+  constructor(name, intervals, repeatCols) {
+    this.name = name;
     this.intervals = intervals;
     this.repeatCols = repeatCols;
   }
 
   toTree() {
     var children = this._toTree();
-    return new RootNode(children);
+    return new RootNode(this.name, children);
   }
 
   _toTree() {

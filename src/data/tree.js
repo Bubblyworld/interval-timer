@@ -7,7 +7,8 @@ const noop = () => {};
 // represent multiple copies of their subtrees and the root node is the unique
 // node at the top.
 class Tree {
-  constructor(children) {
+  constructor(name, children) {
+    this.name = name;
     this.children = children;
   }
 
@@ -93,19 +94,19 @@ class Tree {
       }
     });
 
-    return new Workout(intervals, repeatCols);
+    return new Workout(this.name, intervals, repeatCols);
   }
 }
 
 export class RootNode extends Tree {
-  constructor(children) {
-    super(children);
+  constructor(name, children) {
+    super(name, children);
   }
 }
 
 export class RepeatNode extends Tree {
   constructor(repeats, children) {
-    super(children);
+    super("", children);
 
     this.repeats = repeats;
   }
@@ -113,7 +114,7 @@ export class RepeatNode extends Tree {
 
 export class LeafNode extends Tree {
   constructor(duration, description) {
-    super([]);
+    super("", []);
 
     this.duration = duration;
     this.description = description;

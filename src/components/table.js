@@ -6,32 +6,32 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // Table is a generic row-based table component. Cells can either be flex- or
 // absolute- sized, but complex column-based designs aren't supported.
 export function Table({ children, rowHeight = 40, onRowPress }) {
-  var rows = [];
-  for (var i = 0; i < children.length; i++) {
+  var i = 0;
+  var rows = React.Children.map(children, child => {
     const ic = i; // bind in scope for handler lambda
+    i++;
 
-    var row = React.cloneElement(children[i], {
+    return React.cloneElement(child, {
       key: ic,
       height: rowHeight,
-      isEven: i % 2 == 0,
+      isEven: ic % 2 == 0,
       onPress: () => onRowPress(ic)
     });
-    rows.push(row);
-  }
+  });
 
   return <View style={styles.table}>{rows}</View>;
 }
 
 export function Row({ children, height, isEven, onPress }) {
-  var cells = [];
-  for (var i = 0; i < children.length; i++) {
-    var cell = children[i];
-    if (i != children.length - 1) {
-      cell = React.cloneElement(cell, { hasRightBorder: true });
+  var i = 0;
+  var cells = React.Children.map(children, child => {
+    if (i != React.Children.count(children) - 1) {
+      child = React.cloneElement(child, { hasRightBorder: true });
     }
 
-    cells.push(cell);
-  }
+    i++;
+    return child;
+  });
 
   var classes = [
     styles.row,

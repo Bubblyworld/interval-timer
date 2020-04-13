@@ -5,7 +5,13 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Button msg="Train" onPress={() => navigation.navigate("Train")} />
+      <Button
+        msg="Train"
+        onPress={() =>
+          // TODO: This should navigate to the timer screen.
+          navigation.navigate("Select a Workout", { dest: "Create a Workout" })
+        }
+      />
 
       <Button
         msg="Create a Workout"
