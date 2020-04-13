@@ -17,11 +17,21 @@ export default function TrainScreen({ navigation, route }) {
   const [paused, setPaused] = useState(true);
   const [durationMs, setDurationMs] = useState(parse(traverse.node().duration));
 
+  const nextRep = () => {
+    var next = traverse.next();
+    setDurationMs(parse(traverse.node().duration));
+    setTraverse(next);
+  };
+
   // Advance the clock if we're not paused!
   if (!paused) {
     setTimeout(() => {
-      setDurationMs(durationMs - 50);
-    }, 50);
+      if (durationMs <= 100) {
+        nextRep();
+      } else {
+        setDurationMs(durationMs - 100);
+      }
+    }, 100);
   }
 
   const icons = [];
@@ -44,6 +54,9 @@ export default function TrainScreen({ navigation, route }) {
       />
     );
   }
+  icons.push(
+    <Icon key="next" icon={FaAngleRight} size={50} onPress={nextRep} />
+  );
 
   return (
     <View style={styles.container}>
@@ -59,12 +72,12 @@ export default function TrainScreen({ navigation, route }) {
 }
 
 function Timer({ durationMs }) {
-  const ms = (durationMs % 1000) / 1000.0;
+  const ms = (durationMs % 1000) / 100.0;
 
   return (
     <View style={styles.timer}>
       <Text style={styles.timerText}>{format(durationMs)}</Text>
-      <Text style={styles.msText}>{ms.toFixed(3)}</Text>
+      <Text style={styles.msText}>{ms.toFixed(0)}</Text>
     </View>
   );
 }
