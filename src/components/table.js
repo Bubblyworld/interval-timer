@@ -6,6 +6,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // Table is a generic row-based table component. Cells can either be flex- or
 // absolute- sized, but complex column-based designs aren't supported.
 export function Table({ children, rowHeight = 40, onRowPress }) {
+  // TODO: Remove this key injection stuff, user should handle it.
+
   var i = 0;
   var rows = React.Children.map(children, child => {
     const ic = i; // bind in scope for handler lambda

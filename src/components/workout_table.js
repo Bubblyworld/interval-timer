@@ -1,10 +1,18 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import { Table, Row, Cell } from "../components/table.js";
 import { Sets } from "../components/sets.js";
 import * as Palette from "../palette.js";
+import Dragger from "./dragger.js";
 
 const rowHeight = 40;
+const AnimatedSets = Animated.createAnimatedComponent(Sets);
 
 // WorkoutTable renders the duration/decription table and sets markers, along
 // with hooks for rendering the modals on presses.
@@ -40,11 +48,15 @@ export default function WorkoutTable({
       </View>
 
       <View style={styles.sets}>
-        <Sets
-          repeatCols={repeatCols}
-          height={rowHeight}
-          onSetPress={onSetPress}
-        />
+        <Dragger>
+          <AnimatedSets
+            repeatCols={repeatCols}
+            height={rowHeight}
+            onSetPress={onSetPress}
+            dragStart={10}
+            dragEnd={10}
+          />
+        </Dragger>
       </View>
     </View>
   );

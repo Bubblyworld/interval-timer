@@ -40,10 +40,16 @@ const store = createStore(reducer, {
 });
 
 export default function App() {
+  // Unfortunately gestures clash between navigation and screens, see:
+  //   https://github.com/react-navigation/react-navigation/issues/2088
+  const navOpts = {
+    gestureEnabled: false
+  };
+
   return (
     <Provider store={store}>
       <NavigationContainer theme={navigationTheme}>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Home" screenOptions={navOpts}>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Train" component={TrainScreen} />
           <Stack.Screen name="Create a Workout" component={CreateScreen} />

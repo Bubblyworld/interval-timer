@@ -1,20 +1,24 @@
-import React from "react";
+import React, { useRef } from "react";
 import * as Palette from "../palette.js";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 // Sets is a component that renders the brackets on the right side of the
 // "create a workout" table that indicate groups of intervals that should
 // be repeated. Each "Set" is a vertical column of brackets, which are
-// nested horizontally.
-export function Sets({ repeatCols, height, onSetPress }) {
-  var children = [];
-  for (var i = 0; i < repeatCols.length; i++) {
-    children.push(
-      <Set key={"set-" + i} height={height} repeats={repeatCols[i].repeats} />
-    );
-  }
+// nested horizontally. This is a class component for animation purposes.
+export class Sets extends React.Component {
+  render() {
+    const { repeatCols, height, onSetPress, dragStart, dragEnd } = this.props;
 
-  return <View style={styles.sets}>{children}</View>;
+    var children = [];
+    for (var i = 0; i < repeatCols.length; i++) {
+      children.push(
+        <Set key={"set-" + i} height={height} repeats={repeatCols[i].repeats} />
+      );
+    }
+
+    return <View style={styles.sets}>{children}</View>;
+  }
 }
 
 function Set({ height, repeats }) {
@@ -43,6 +47,7 @@ function Set({ height, repeats }) {
     lastIndex = repeat.indexB;
   }
 
+  // TODO: Pass in total workout table height for final space.
   return <View style={styles.set}>{children}</View>;
 }
 
@@ -65,6 +70,10 @@ function Repeat({ height, markerOffset, repeats }) {
       </View>
     </TouchableOpacity>
   );
+}
+
+function isDragging(dragStart, dragEnd) {
+  return dragStart != 0 || dragEnd != 0;
 }
 
 const styles = StyleSheet.create({
