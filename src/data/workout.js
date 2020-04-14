@@ -69,6 +69,46 @@ export class Workout {
 
     return children;
   }
+
+  isValid(repeat) {
+    for (var i = 0; i < this.repeatCols.length; i++) {
+      for (var j = 0; j < this.repeatCols[i].repeats.length; j++) {
+        var other = this.repeatCols[i].repeats[j];
+
+        if (!repeat.intersects(other)) {
+          continue;
+        }
+
+        if (repeat.equals(other)) {
+          return false; // workout already contains interval
+        }
+
+        if (!repeat.contains(other) && !other.contains(repeat)) {
+          return false; // tree constaint is violated
+        }
+      }
+    }
+
+    return true;
+  }
+
+  addRepeat(repeat) {
+    if (!this.isValid(repeat)) {
+      throw new Error(
+        "tried to add a repeat that violates the workout constraints"
+      );
+    }
+
+    for (var i = 0; i < this.repeatCols.length; i++) {
+      if (this.repeatCols[i].isDisjoint(repeat)) {
+        this.repeatCols[i].push(repeat);
+        this.repeatCols[i].sort((a, b) => (a.indexA < b.indexA ? -1 : 1));
+        return;
+      }
+    }
+
+    this.repeatCols.push(new RepeatCol([repeat]));
+  }
 }
 
 export class Interval {
@@ -92,6 +132,22 @@ export class RepeatCol {
 
     this.repeats.push(repeat);
   }
+
+  isDisjoint(repeat) {
+    for (var i = 0; i < this.repeats.length; i++) {
+      const other = this.repeats[i];
+
+      if (repeat.intersects(other)) {
+        return false;
+      }
+
+      if (repeat.contains(other) || other.contains(repeat)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
 
 // Repeat represents repeating the intervals in the range [indexA, indexB).
@@ -102,11 +158,23 @@ export class Repeat {
     this.repeats = repeats;
   }
 
-  contains(index) {
-    return index >= this.indexA && index <= this.indexB;
+  containsIndex(index) {
+    return index >= this.indexA && index < this.indexB;
+  }
+
+  contains(repeat) {
+    return (
+      this.containsIndex(repeat.indexA) && this.containsIndex(repeat.indexB - 1)
+    );
+  }
+
+  equals(repeat) {
+    return this.indexA == repeat.indexA && this.indexB == repeat.indexB;
   }
 
   intersects(repeat) {
-    return this.contains(repeat.indexA) || this.contains(repeat.indexB);
+    return (
+      this.containsIndex(repeat.indexA) || this.containsIndex(repeat.indexB - 1)
+    );
   }
 }

@@ -4,6 +4,7 @@ export const MODIFY_WORKOUT = "MODIFY_WORKOUT";
 export const DELETE_WORKOUT = "DELETE_WORKOUT";
 export const MODIFY_INTERVAL = "MODIFY_INTERVAL";
 export const MODIFY_NAME = "MODIFY_NAME";
+export const ADD_REPEAT = "ADD_REPEAT";
 
 export function addWorkout(workout) {
   return {
@@ -41,5 +42,13 @@ export function modifyName(index, name) {
     type: MODIFY_NAME,
     index: index,
     name: name
+  };
+}
+
+export function addRepeat(index, repeat) {
+  return {
+    type: ADD_REPEAT,
+    index: index,
+    repeat: repeat
   };
 }

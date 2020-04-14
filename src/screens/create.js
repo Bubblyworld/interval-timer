@@ -5,7 +5,7 @@ import WorkoutTable from "../components/workout_table.js";
 import IntervalModal from "../modals/interval_modal.js";
 import * as Palette from "../palette.js";
 import actions from "../redux/actions";
-import { Workout } from "../data/workout.js";
+import { Workout, Repeat } from "../data/workout.js";
 import Input from "../components/input.js";
 
 export default function CreateScreen({ navigation, route }) {
@@ -34,13 +34,17 @@ export default function CreateScreen({ navigation, route }) {
       </View>
 
       <WorkoutTable
-        intervals={workout.intervals}
-        repeatCols={workout.repeatCols}
+        workout={workout}
         onRowPress={i => {
           setEditRowIndex(i);
           setEditRowVisible(true);
         }}
-        onSetPress={() => {}}
+        onSetDrag={(startI, endI) => {
+          const repeat = new Repeat(startI, endI + 1);
+          if (workout.isValid(repeat)) {
+            dispatch(actions.addRepeat(workoutIndex, repeat));
+          }
+        }}
       />
 
       <IntervalModal

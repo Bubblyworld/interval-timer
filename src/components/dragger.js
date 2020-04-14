@@ -14,7 +14,7 @@ import {
 // Two props are injected into its children: 'dragStart' and 'dragEnd', both
 // of which are Animated.Values, so its assumed the children are
 // AnimatedComponents.
-export default function Dragger({ children }) {
+export default function Dragger({ children, onRelease }) {
   // For keeping track of drag events in the UI:
   const panStart = useRef(new Animated.ValueXY()).current;
   const panDiff = useRef(new Animated.ValueXY()).current;
@@ -23,6 +23,8 @@ export default function Dragger({ children }) {
       onMoveShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderRelease: () => {
+        onRelease(panStart.y._value, panStart.y._value + panDiff.y._value);
+
         panDiff.setValue({ x: 0, y: 0 });
         panStart.setValue({ x: 0, y: 0 });
       },

@@ -17,23 +17,25 @@ const AnimatedSets = Animated.createAnimatedComponent(Sets);
 // WorkoutTable renders the duration/decription table and sets markers, along
 // with hooks for rendering the modals on presses.
 export default function WorkoutTable({
-  intervals,
-  repeatCols,
+  workout,
   onRowPress,
-  onSetPress
+  onSetPress,
+  onSetDrag
 }) {
   var rows = [];
-  for (var i = 0; i < intervals.length; i++) {
+  for (var i = 0; i < workout.intervals.length; i++) {
     rows.push(
       <Row key={"row-" + i}>
         <Cell absolute={60}>
           <View style={styles.durTextWrap}>
-            <Text style={styles.durText}>{intervals[i].duration}</Text>
+            <Text style={styles.durText}>{workout.intervals[i].duration}</Text>
           </View>
         </Cell>
 
         <Cell flex={1}>
-          <Text style={styles.descText}>{intervals[i].description}</Text>
+          <Text style={styles.descText}>
+            {workout.intervals[i].description}
+          </Text>
         </Cell>
       </Row>
     );
@@ -48,11 +50,15 @@ export default function WorkoutTable({
       </View>
 
       <View style={styles.sets}>
-        <Dragger>
+        <Dragger
+          onRelease={(dragStart, dragEnd) => {
+            onSetDrag((dragStart / rowHeight) >> 0, (dragEnd / rowHeight) >> 0);
+          }}
+        >
           <AnimatedSets
-            repeatCols={repeatCols}
-            height={rowHeight}
             onSetPress={onSetPress}
+            workout={workout}
+            height={rowHeight}
             dragStart={10}
             dragEnd={10}
           />
