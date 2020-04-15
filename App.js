@@ -28,7 +28,8 @@ var il = [
 
 var rcl = [
   new RepeatCol([new Repeat(0, 2, 5), new Repeat(4, 6, 5)]),
-  new RepeatCol([new Repeat(0, 3, 3), new Repeat(4, 7, 3)])
+  new RepeatCol([new Repeat(0, 3, 3), new Repeat(4, 7, 3)]),
+  new RepeatCol([new Repeat(0, 4, 1)])
 ];
 
 const store = createStore(reducer, {

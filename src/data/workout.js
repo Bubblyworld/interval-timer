@@ -11,63 +11,86 @@ export class Workout {
   }
 
   toTree() {
-    var children = this._toTree();
-    return new RootNode(this.name, children);
-  }
+    var maxRank = -1;
+    var nodesByRank = {}; // rank is length from node to root in final tree
+    this.intervals.forEach((interval, i) => {
+      const rank = this._rankOfIndex(i);
+      var nodes = nodesByRank[rank] || [];
+      var node = new LeafNode(interval.duration, interval.description);
 
-  _toTree() {
-    var repeatCol = new RepeatCol([]);
-    if (this.repeatCols.length > 0) {
-      // TODO: sort by indexA, currently assumes it's in order
-      repeatCol = this.repeatCols[this.repeatCols.length - 1];
+      node._index = i;
+      maxRank = Math.max(maxRank, rank);
+      nodes.push(node);
+      nodesByRank[rank] = nodes;
+    });
+    this.repeatCols.forEach(repeatCol => {
+      repeatCol.repeats.forEach(repeat => {
+        const rank = this._rankOfRepeat(repeat);
+        var nodes = nodesByRank[rank] || [];
+        var node = new RepeatNode(repeat.repeats, []);
+
+        node._index = repeat.indexA;
+        maxRank = Math.max(maxRank, rank);
+        nodes.push(node);
+        nodesByRank[rank] = nodes;
+      });
+    });
+
+    var tree = new RootNode(this.name, []);
+    if (maxRank == -1) {
+      return tree; // corner-case where workout is empty
     }
 
-    var rci = 0;
-    var children = [];
-    for (var i = 0; i < this.intervals.length; i++) {
-      if (
-        repeatCol.repeats.length > 0 &&
-        rci < repeatCol.repeats.length &&
-        i == repeatCol.repeats[rci].indexA
-      ) {
-        var subRepeats = [];
-        var subIntervals = this.intervals.slice(
-          i,
-          repeatCol.repeats[rci].indexB
+    // To preserve order, we need to sort the nodes in each rank by index.
+    for (var i = 0; i <= maxRank; i++) {
+      var nodes = nodesByRank[i] || [];
+      nodes.sort((a, b) => (a._index < b._index ? -1 : 1));
+      nodesByRank[i] = nodes;
+    }
+
+    // Build up the tree by adding each node to it's containing parent's nodes.
+    (nodesByRank[0] || []).forEach(node => tree.children.push(node));
+    for (var rank = 1; rank <= maxRank; rank++) {
+      (nodesByRank[rank] || []).forEach(node => {
+        const parents = (nodesByRank[rank - 1] || []).filter(
+          parent => parent._index <= node._index
         );
 
-        var diff = repeatCol.repeats[rci].indexA;
-        for (var j = 0; j < this.repeatCols.length - 1; j++) {
-          subRepeats.push(new RepeatCol([]));
-
-          for (var k = 0; k < this.repeatCols[j].repeats.length; k++) {
-            var repeat = this.repeatCols[j].repeats[k];
-            if (repeatCol.repeats[rci].intersects(repeat)) {
-              subRepeats[j].push(
-                new Repeat(
-                  repeat.indexA - diff,
-                  repeat.indexB - diff,
-                  repeat.repeats
-                )
-              );
-            }
-          }
-        }
-
-        var subTree = new Workout("", subIntervals, subRepeats)._toTree();
-        children.push(new RepeatNode(repeatCol.repeats[rci].repeats, subTree));
-        i += subIntervals.length - 1;
-        rci++;
-
-        continue;
-      }
-
-      children.push(
-        new LeafNode(this.intervals[i].duration, this.intervals[i].description)
-      );
+        parents[parents.length - 1].children.push(node);
+      });
     }
 
-    return children;
+    return tree;
+  }
+
+  _rankOfIndex(index) {
+    var rank = 0;
+    this.repeatCols.forEach(repeatCol => {
+      repeatCol.repeats.forEach(repeat => {
+        if (repeat.containsIndex(index)) {
+          rank++;
+        }
+      });
+    });
+
+    return rank;
+  }
+
+  _rankOfRepeat(rep) {
+    var rank = 0;
+    this.repeatCols.forEach(repeatCol => {
+      repeatCol.repeats.forEach(repeat => {
+        if (repeat.equals(rep)) {
+          return;
+        }
+
+        if (repeat.contains(rep)) {
+          rank++;
+        }
+      });
+    });
+
+    return rank;
   }
 
   isValid(repeat) {
@@ -102,7 +125,9 @@ export class Workout {
     for (var i = 0; i < this.repeatCols.length; i++) {
       if (this.repeatCols[i].isDisjoint(repeat)) {
         this.repeatCols[i].push(repeat);
-        this.repeatCols[i].sort((a, b) => (a.indexA < b.indexA ? -1 : 1));
+        this.repeatCols[i].repeats.sort((a, b) =>
+          a.indexA < b.indexA ? -1 : 1
+        );
         return;
       }
     }
