@@ -8,7 +8,8 @@ import {
   ADD_REPEAT,
   ADD_INTERVAL,
   DELETE_INTERVAL,
-  DELETE_REPEAT
+  DELETE_REPEAT,
+  SET_WORKOUTS
 } from "../actions/workouts.js";
 import { RootNode } from "../../data/tree.js";
 import { Workout, Interval, RepeatCol, Repeat } from "../../data/workout.js";
@@ -17,6 +18,9 @@ import { Workout, Interval, RepeatCol, Repeat } from "../../data/workout.js";
 
 export default (workouts = [], action) => {
   switch (action.type) {
+    case SET_WORKOUTS:
+      return action.workouts;
+
     case ADD_WORKOUT:
       return [...workouts, action.workout];
 

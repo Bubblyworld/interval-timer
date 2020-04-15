@@ -1,6 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,33 +12,29 @@ import * as Palette from "./src/palette.js";
 import { Tree, RepeatNode, LeafNode } from "./src/data/tree.js";
 import { Workout, Interval, RepeatCol, Repeat } from "./src/data/workout.js";
 import reducer from "./src/redux/reducers";
+import storageMiddleware from "./src/redux/middleware.js";
+import { loadFromStorage } from "./src/storage.js";
+import actions from "./src/redux/actions";
 
 const Stack = createStackNavigator();
+const storageDelayMs = 1000;
 
-// TODO: following is hardcoded for testing, remove.
-var il = [
-  new Interval("12s", "9kg 12mm half crimp hang"),
-  new Interval("3m", "rest"),
-  new Interval("2m", "end of set rest"),
-  new Interval("5m", "end of exercise rest"),
-  new Interval("12s", "9kg 15mm open hand hang"),
-  new Interval("3m", "rest"),
-  new Interval("2m", "end of set rest")
-];
+const store = createStore(
+  reducer,
+  applyMiddleware(storageMiddleware(storageDelayMs))
+);
 
-var rcl = [
-  new RepeatCol([new Repeat(0, 2, 5), new Repeat(4, 6, 5)]),
-  new RepeatCol([new Repeat(0, 3, 3), new Repeat(4, 7, 3)]),
-  new RepeatCol([new Repeat(0, 4, 1)])
-];
-
-const store = createStore(reducer, {
-  workouts: [
-    new Workout("Guy's first workout", il, rcl).toTree(),
-    new Workout("Guy's second workout", il, rcl).toTree(),
-    new Workout("Guy's third workout", il, rcl).toTree()
-  ]
-});
+// Load initial state.
+loadFromStorage().then(
+  workouts => {
+    store.dispatch(actions.setWorkouts(workouts));
+    store.dispatch(actions.updateStorage(0));
+  },
+  err => {
+    alert("Failed to load data from storage: " + err);
+    alert("You will NOT be able to save any workouts this session!");
+  }
+);
 
 export default function App() {
   // Unfortunately gestures clash between navigation and screens, see:

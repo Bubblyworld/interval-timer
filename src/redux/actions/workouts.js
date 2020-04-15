@@ -1,4 +1,5 @@
 // Each user has a list of their defined workouts that they can modify/create.
+export const SET_WORKOUTS = "SET_WORKOUTS";
 export const ADD_WORKOUT = "ADD_WORKOUT";
 export const MODIFY_WORKOUT = "MODIFY_WORKOUT";
 export const DELETE_WORKOUT = "DELETE_WORKOUT";
@@ -9,6 +10,14 @@ export const ADD_REPEAT = "ADD_REPEAT";
 export const ADD_INTERVAL = "ADD_INTERVAL";
 export const DELETE_INTERVAL = "DELETE_INTERVAL";
 export const DELETE_REPEAT = "DELETE_REPEAT";
+
+export function setWorkouts(workouts) {
+  // only for initial state load
+  return {
+    type: SET_WORKOUTS,
+    workouts: workouts
+  };
+}
 
 export function addWorkout(workout) {
   return {
