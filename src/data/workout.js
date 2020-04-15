@@ -132,6 +132,50 @@ export class Workout {
 
     this.repeatCols.push(new RepeatCol([repeat]));
   }
+
+  deleteInterval(index) {
+    var intervals = [
+      ...this.intervals.slice(0, index),
+      ...this.intervals.slice(index + 1)
+    ];
+
+    var repeatCols = this.repeatCols
+      .map(repeatCol => {
+        return new RepeatCol(
+          repeatCol.repeats
+            .map(repeat => {
+              var indexA =
+                repeat.indexA > index ? repeat.indexA - 1 : repeat.indexA;
+              var indexB =
+                repeat.indexB > index ? repeat.indexB - 1 : repeat.indexB;
+
+              return new Repeat(indexA, indexB, repeat.repeats);
+            })
+            .filter(repeat => repeat.indexB - repeat.indexA > 0)
+        );
+      })
+      .filter(repeatCol => repeatCol.repeats.length > 0);
+
+    this.intervals = intervals;
+    this.repeatCols = [];
+    repeatCols.forEach(repeatCol => {
+      repeatCol.repeats.forEach(repeat => this.addRepeat(repeat));
+    });
+  }
+
+  deleteRepeat(colIndex, repIndex) {
+    var repeatCols = this.repeatCols;
+    this.repeatCols = [];
+    repeatCols.forEach((repeatCol, col) => {
+      repeatCol.repeats.forEach((repeat, rep) => {
+        if (col == colIndex && rep == repIndex) {
+          return;
+        }
+
+        this.addRepeat(repeat);
+      });
+    });
+  }
 }
 
 export class Interval {

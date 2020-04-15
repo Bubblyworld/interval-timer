@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "./modal.js";
 import Input from "../components/input.js";
+import Button from "../components/button.js";
 
 // IntervalModal controls editing of a particular interval's time and
 // description. Later on we'll implement metrics and allow them to be
@@ -9,6 +10,7 @@ export default function IntervalModal({
   visible,
   interval,
   onChange,
+  onDelete,
   onClose
 }) {
   return (
@@ -27,6 +29,8 @@ export default function IntervalModal({
           onChange(Object.assign(interval, { description: desc }))
         }
       />
+
+      <Button msg="Delete" onPress={onDelete} />
     </Modal>
   );
 }

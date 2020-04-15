@@ -84,6 +84,11 @@ export default function CreateScreen({ navigation, route }) {
           setEditRowVisible(false);
           setEditRowIndex(0);
         }}
+        onDelete={() => {
+          dispatch(actions.deleteInterval(workoutIndex, editRowIndex));
+          setEditRowVisible(false);
+          setEditRowIndex(0);
+        }}
       />
 
       <RepeatModal
@@ -100,6 +105,18 @@ export default function CreateScreen({ navigation, route }) {
           );
         }}
         onClose={() => {
+          setEditRepeatVisible(false);
+          setEditRepeatColIndex(0);
+          setEditRepeatIndex(0);
+        }}
+        onDelete={() => {
+          dispatch(
+            actions.deleteRepeat(
+              workoutIndex,
+              editRepeatColIndex,
+              editRepeatIndex
+            )
+          );
           setEditRepeatVisible(false);
           setEditRepeatColIndex(0);
           setEditRepeatIndex(0);

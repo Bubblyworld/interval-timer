@@ -6,7 +6,9 @@ import {
   MODIFY_REPEAT,
   MODIFY_NAME,
   ADD_REPEAT,
-  ADD_INTERVAL
+  ADD_INTERVAL,
+  DELETE_INTERVAL,
+  DELETE_REPEAT
 } from "../actions/workouts.js";
 import { RootNode } from "../../data/tree.js";
 import { Workout, Interval, RepeatCol, Repeat } from "../../data/workout.js";
@@ -100,6 +102,28 @@ export default (workouts = [], action) => {
         ...workouts.slice(0, action.index),
         workout.toTree(),
         ...workouts.slice(action.index + 1)
+      ];
+    }
+
+    case DELETE_INTERVAL: {
+      let workout = workouts[action.workoutIndex].toWorkout();
+      workout.deleteInterval(action.intervalIndex);
+
+      return [
+        ...workouts.slice(0, action.workoutIndex),
+        workout.toTree(),
+        ...workouts.slice(action.workoutIndex + 1)
+      ];
+    }
+
+    case DELETE_REPEAT: {
+      let workout = workouts[action.workoutIndex].toWorkout();
+      workout.deleteRepeat(action.colIndex, action.repIndex);
+
+      return [
+        ...workouts.slice(0, action.workoutIndex),
+        workout.toTree(),
+        ...workouts.slice(action.workoutIndex + 1)
       ];
     }
   }

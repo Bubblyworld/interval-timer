@@ -7,6 +7,8 @@ export const MODIFY_REPEAT = "MODIFY_REPEAT";
 export const MODIFY_NAME = "MODIFY_NAME";
 export const ADD_REPEAT = "ADD_REPEAT";
 export const ADD_INTERVAL = "ADD_INTERVAL";
+export const DELETE_INTERVAL = "DELETE_INTERVAL";
+export const DELETE_REPEAT = "DELETE_REPEAT";
 
 export function addWorkout(workout) {
   return {
@@ -71,5 +73,22 @@ export function addInterval(index, duration, description) {
     index: index,
     duration: duration,
     description: description
+  };
+}
+
+export function deleteInterval(workoutIndex, intervalIndex) {
+  return {
+    type: DELETE_INTERVAL,
+    workoutIndex: workoutIndex,
+    intervalIndex: intervalIndex
+  };
+}
+
+export function deleteRepeat(workoutIndex, colIndex, repIndex) {
+  return {
+    type: DELETE_REPEAT,
+    workoutIndex: workoutIndex,
+    colIndex: colIndex,
+    repIndex: repIndex
   };
 }
