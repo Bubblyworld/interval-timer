@@ -5,10 +5,11 @@ import {
   MODIFY_INTERVAL,
   MODIFY_REPEAT,
   MODIFY_NAME,
-  ADD_REPEAT
+  ADD_REPEAT,
+  ADD_INTERVAL
 } from "../actions/workouts.js";
 import { RootNode } from "../../data/tree.js";
-import { Workout, RepeatCol, Repeat } from "../../data/workout.js";
+import { Workout, Interval, RepeatCol, Repeat } from "../../data/workout.js";
 
 // TODO: Refactor this shit with lenses. Oh my god.
 
@@ -83,6 +84,17 @@ export default (workouts = [], action) => {
     case ADD_REPEAT: {
       let workout = workouts[action.index].toWorkout();
       workout.addRepeat(action.repeat);
+
+      return [
+        ...workouts.slice(0, action.index),
+        workout.toTree(),
+        ...workouts.slice(action.index + 1)
+      ];
+    }
+
+    case ADD_INTERVAL: {
+      let workout = workouts[action.index].toWorkout();
+      workout.intervals.push(new Interval(action.duration, action.description));
 
       return [
         ...workouts.slice(0, action.index),

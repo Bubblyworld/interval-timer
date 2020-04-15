@@ -8,6 +8,8 @@ import * as Palette from "../palette.js";
 import actions from "../redux/actions";
 import { Workout, Repeat } from "../data/workout.js";
 import Input from "../components/input.js";
+import Icon from "../components/icon.js";
+import { FaPlus } from "react-icons/fa";
 
 export default function CreateScreen({ navigation, route }) {
   const workoutIndex = route.params.selectedIndex;
@@ -60,6 +62,18 @@ export default function CreateScreen({ navigation, route }) {
         }}
       />
 
+      <View style={styles.iconWrap}>
+        <Icon
+          icon={FaPlus}
+          size={20}
+          onPress={() =>
+            dispatch(
+              actions.addInterval(workoutIndex, "10s", "A new interval.")
+            )
+          }
+        />
+      </View>
+
       <IntervalModal
         visible={editRowVisible}
         interval={workout.intervals[editRowIndex]}
@@ -106,5 +120,12 @@ const styles = StyleSheet.create({
 
   nameWrap: {
     width: 200
+  },
+
+  iconWrap: {
+    width: "100%",
+    maxWidth: 800,
+    alignItems: "center",
+    marginTop: 20
   }
 });
