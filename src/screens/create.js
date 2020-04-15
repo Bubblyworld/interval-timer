@@ -56,9 +56,7 @@ export default function CreateScreen({ navigation, route }) {
         }}
         onSetDrag={(startI, endI) => {
           const repeat = new Repeat(startI, endI + 1, 1);
-          if (workout.isValid(repeat)) {
-            dispatch(actions.addRepeat(workoutIndex, repeat));
-          }
+          dispatch(actions.addRepeat(workoutIndex, repeat));
         }}
       />
 
