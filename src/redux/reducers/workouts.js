@@ -3,11 +3,14 @@ import {
   MODIFY_WORKOUT,
   DELETE_WORKOUT,
   MODIFY_INTERVAL,
+  MODIFY_REPEAT,
   MODIFY_NAME,
   ADD_REPEAT
 } from "../actions/workouts.js";
 import { RootNode } from "../../data/tree.js";
-import { Workout } from "../../data/workout.js";
+import { Workout, RepeatCol, Repeat } from "../../data/workout.js";
+
+// TODO: Refactor this shit with lenses. Oh my god.
 
 export default (workouts = [], action) => {
   switch (action.type) {
@@ -38,6 +41,30 @@ export default (workouts = [], action) => {
         ],
         workout.repeatCols
       );
+
+      return [
+        ...workouts.slice(0, action.workoutIndex),
+        newWorkout.toTree(),
+        ...workouts.slice(action.workoutIndex + 1)
+      ];
+    }
+
+    case MODIFY_REPEAT: {
+      let workout = workouts[action.workoutIndex].toWorkout();
+      let col = workout.repeatCols[action.colIndex];
+      let rep = col.repeats[action.repIndex];
+      let newRep = new Repeat(rep.indexA, rep.indexB, action.repeats);
+      let newCol = new RepeatCol([
+        ...col.repeats.slice(0, action.repIndex),
+        newRep,
+        ...col.repeats.slice(action.repIndex + 1)
+      ]);
+
+      let newWorkout = new Workout(workout.name, workout.intervals, [
+        ...workout.repeatCols.slice(0, action.colIndex),
+        newCol,
+        ...workout.repeatCols.slice(action.colIndex + 1)
+      ]);
 
       return [
         ...workouts.slice(0, action.workoutIndex),

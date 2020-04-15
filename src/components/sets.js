@@ -9,7 +9,14 @@ import * as W from "../data/workout.js";
 // nested horizontally. This is a class component for animation purposes.
 export class Sets extends React.Component {
   render() {
-    const { workout, height, onSetPress, dragStart, dragEnd } = this.props;
+    const {
+      workout,
+      height,
+      totalHeight,
+      onSetPress,
+      dragStart,
+      dragEnd
+    } = this.props;
 
     var repeatCols = [...workout.repeatCols];
     if (isDragging(dragStart, dragEnd)) {
@@ -23,19 +30,29 @@ export class Sets extends React.Component {
 
     var children = [];
     for (var i = 0; i < repeatCols.length; i++) {
+      const ic = i; // bind for handler lambda
+
       children.push(
-        <Set key={"set-" + i} height={height} repeats={repeatCols[i].repeats} />
+        <Set
+          key={"set-" + i}
+          height={height}
+          onSetPress={i => onSetPress(ic, i)}
+          repeats={repeatCols[i].repeats}
+        />
       );
     }
 
-    return <View style={styles.sets}>{children}</View>;
+    return (
+      <View style={[styles.sets, { height: totalHeight }]}>{children}</View>
+    );
   }
 }
 
-function Set({ height, repeats }) {
+function Set({ height, repeats, onSetPress }) {
   var lastIndex = 0;
   var children = [];
   for (var i = 0; i < repeats.length; i++) {
+    const ic = i; // bind for handler lambas
     const repeat = repeats[i];
 
     if (repeat.indexA > lastIndex) {
@@ -52,7 +69,8 @@ function Set({ height, repeats }) {
         markerOffset={height / 3}
         height={diff * height}
         color={repeat.color}
-        repeats={2}
+        repeats={repeat.repeats}
+        onPress={() => onSetPress(ic)}
       />
     );
 
@@ -63,11 +81,11 @@ function Set({ height, repeats }) {
   return <View style={styles.set}>{children}</View>;
 }
 
-function Repeat({ height, markerOffset, color, repeats }) {
+function Repeat({ height, markerOffset, color, repeats, onPress }) {
   const style = color ? { borderColor: color } : {};
 
   return (
-    <TouchableOpacity onLongPress={() => {}}>
+    <TouchableOpacity onPress={onPress}>
       <View style={[styles.repeat, { height: height }]}>
         <View
           style={[

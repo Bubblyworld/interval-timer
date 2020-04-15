@@ -59,6 +59,7 @@ export default function WorkoutTable({
             onSetPress={onSetPress}
             workout={workout}
             height={rowHeight}
+            totalHeight={rowHeight * workout.intervals.length}
             dragStart={10}
             dragEnd={10}
           />

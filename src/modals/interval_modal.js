@@ -12,6 +12,7 @@ export default function IntervalModal({
   onClose
 }) {
   return (
+    // TODO: Fix immutability here.
     <Modal visible={visible} onClose={onClose}>
       <Input
         title="Duration"

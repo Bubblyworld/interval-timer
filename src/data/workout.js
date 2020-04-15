@@ -117,9 +117,7 @@ export class Workout {
 
   addRepeat(repeat) {
     if (!this.isValid(repeat)) {
-      throw new Error(
-        "tried to add a repeat that violates the workout constraints"
-      );
+      return; // can't do anything in this case
     }
 
     for (var i = 0; i < this.repeatCols.length; i++) {

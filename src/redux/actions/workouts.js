@@ -3,6 +3,7 @@ export const ADD_WORKOUT = "ADD_WORKOUT";
 export const MODIFY_WORKOUT = "MODIFY_WORKOUT";
 export const DELETE_WORKOUT = "DELETE_WORKOUT";
 export const MODIFY_INTERVAL = "MODIFY_INTERVAL";
+export const MODIFY_REPEAT = "MODIFY_REPEAT";
 export const MODIFY_NAME = "MODIFY_NAME";
 export const ADD_REPEAT = "ADD_REPEAT";
 
@@ -34,6 +35,16 @@ export function modifyInterval(workoutIndex, intervalIndex, interval) {
     workoutIndex: workoutIndex,
     intervalIndex: intervalIndex,
     interval: interval
+  };
+}
+
+export function modifyRepeat(workoutIndex, colIndex, repIndex, repeats) {
+  return {
+    type: MODIFY_REPEAT,
+    workoutIndex: workoutIndex,
+    colIndex: colIndex,
+    repIndex: repIndex,
+    repeats: repeats
   };
 }
 
