@@ -15,6 +15,7 @@ import reducer from "./src/redux/reducers";
 import storageMiddleware from "./src/redux/middleware.js";
 import { loadFromStorage } from "./src/storage.js";
 import actions from "./src/redux/actions";
+import { SHORT_BEEP, playSound, loadSounds } from "./src/sound.js";
 
 const Stack = createStackNavigator();
 const storageDelayMs = 1000;
@@ -33,6 +34,15 @@ loadFromStorage().then(
   err => {
     alert("Failed to load data from storage: " + err);
     alert("You will NOT be able to save any workouts this session!");
+  }
+);
+
+// Load initial sound cache.
+loadSounds().then(
+  () => {},
+  err => {
+    alert("Failed to load sounds from storage: " + err);
+    alert("You will NOT hear any sounds this session!");
   }
 );
 

@@ -7,6 +7,7 @@ import { FaPause, FaPlay, FaRedo, FaAngleRight } from "react-icons/fa";
 import parse from "parse-duration";
 import format from "format-duration";
 import Icon from "../components/icon.js";
+import { SHORT_BEEP, playSound } from "../sound.js";
 
 export default function TrainScreen({ navigation, route }) {
   const workoutIndex = getWorkoutIndex(route);
@@ -99,6 +100,9 @@ function redoIcon(state, setState) {
   );
 }
 
+// TODO: Need a different beep sound on 0 I think.
+const beepThresholds = [0, 1000, 2000, 3000];
+
 function timerEffect(state, setState) {
   return () => {
     if (!state.isPaused) {
@@ -108,6 +112,15 @@ function timerEffect(state, setState) {
         if (cancelled) {
           return;
         }
+
+        beepThresholds.forEach(threshold => {
+          if (
+            state.timeRemainingMs >= threshold &&
+            state.timeRemainingMs <= threshold + 100
+          ) {
+            playSound(SHORT_BEEP);
+          }
+        });
 
         if (state.timeRemainingMs <= 100) {
           setState(uiState(state, nextRep()));
