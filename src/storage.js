@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-community/async-storage";
+import { AsyncStorage } from 'react-native';
 import { workoutsToJSON, workoutsFromJSON } from "./data/serialise.js";
 
 const storageKey = "LOCKDOWN-2020-INTERVAL-TIMER";
