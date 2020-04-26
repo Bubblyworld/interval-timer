@@ -1,7 +1,7 @@
 import React from "react";
 import * as Palette from "../palette.js";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Button from "../components/button.js";
+import Button from "../components/button";
 
 // Modal is a wrapper component that is absolutely positioned in the center
 // and can be enabled/disabled by a flag. It contains a button that closes

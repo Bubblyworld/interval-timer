@@ -4,6 +4,7 @@ import * as Palette from "../palette.js";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import actions from "../redux/actions";
 import { LeafNode, RootNode } from "../data/tree.js";
+import Button from '../components/button';
 
 export default function HomeScreen({ navigation }) {
   const workouts = useSelector(state => state.workouts, shallowEqual);
@@ -34,14 +35,6 @@ export default function HomeScreen({ navigation }) {
         }}
       />
     </View>
-  );
-}
-
-function Button({ msg, onPress }) {
-  return (
-    <TouchableOpacity style={styles.buttons} onPress={onPress}>
-      <Text style={styles.buttonText}> {msg} </Text>
-    </TouchableOpacity>
   );
 }
 

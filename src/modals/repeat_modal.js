@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "./modal.js";
 import Input from "../components/input.js";
 import { Repeat } from "../data/workout.js";
-import Button from "../components/button.js";
+import Button from "../components/button";
 
 // RepeatModal controls editing of the repeats in a set.
 export default function RepeatModal({

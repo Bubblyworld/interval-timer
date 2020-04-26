@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "./modal.js";
 import { StyleSheet, Text, View } from "react-native";
-import Button from "../components/button.js";
+import Button from "../components/button";
 import * as Palette from "../palette.js";
 
 // DeleteModal asks a user if they're sure before triggering some action.
